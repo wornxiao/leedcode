@@ -40,43 +40,56 @@ import java.util.concurrent.ConcurrentLinkedDeque;
 public class StrIsValid {
 
     public static void main(String[] args) {
-        String st="]";
+        String st="{[]}";
         boolean valid = isValid(st);
         System.out.println(valid);
     }
 
     public static boolean isValid(String s) {
+        char[] chars1 = s.toCharArray();
+        if (chars1.length % 2 != 0) {
+            return false;
+        }
         if(s.startsWith(")")||s.startsWith("]")||s.startsWith("}")){
             return false;
         }
-        Deque<Character> stack=new ConcurrentLinkedDeque();
+        Deque<Character> stackLeft=new ConcurrentLinkedDeque();
+
         char[] chars = s.toCharArray();
-        for(int i=0;i<chars.length;i++){
+        for (int i = 0; i < chars.length; i++) {
             char aChar = chars[i];
-            if(aChar=='('||aChar=='{'||aChar=='['){
-                stack.push(aChar);
+            if (aChar == '(' || aChar == '{' || aChar == '[') {
+                stackLeft.push(aChar);
                 continue;
             }
-            Character pop = stack.peek();
-            if(pop==null){
-                continue;
+            if (aChar == ')') {
+                Character peek = stackLeft.peek();
+                if (peek != null && peek == '(') {
+                    stackLeft.pop();
+                }else{
+                    stackLeft.push(aChar);
+                }
             }
-            if (aChar == ')' && '(' == pop) {
-                stack.pop();
-                continue;
+            if (aChar == ']') {
+                Character peek = stackLeft.peek();
+                if (peek != null && peek == '[') {
+                    stackLeft.pop();
+                }else{
+                    stackLeft.push(aChar);
+                }
             }
-            if (aChar == '}' && '{' == pop) {
-                stack.pop();
-                continue;
-            }
-            if (aChar == ']' && '[' == pop) {
-                stack.pop();
+            if (aChar == '}') {
+                Character peek = stackLeft.peek();
+                if (peek != null && peek == '{') {
+                    stackLeft.pop();
+                }else{
+                    stackLeft.push(aChar);
+                }
             }
         }
-        if(stack.isEmpty()){
+        if(stackLeft.isEmpty()){
             return true;
         }
         return false;
     }
-
 }

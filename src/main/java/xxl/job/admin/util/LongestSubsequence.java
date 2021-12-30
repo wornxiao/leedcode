@@ -33,12 +33,13 @@ import java.util.*;
 public class LongestSubsequence {
 
     public static void main(String[] args) {
-        //[4,12,10,0,-2,7,-8,9,-9,-12,-12,8,8] 0
+        //[10,-11,8,-1,-14,-5,7,15,7,-2,14,5,-3,-9,12,-9]
+        //-2
         //[4,12,10,0,-2,7,-8,9,-9,-12,-12,8,8]
         //[4,12,10,0,-2,7,-8,9,-9,-12,-12,8,8]
         //0
-        int[] num={4,12,10,0,-2,7,-8,9,-9,-12,-12,8,8};
-        int i = longestSubsequence(num, 0);
+        int[] num={10,-11,8,-1,-14,-5,7,15,7,-2,14,5,-3,-9,12,-9};
+        int i = longestSubsequence(num, -2);
         System.out.println(i);
     }
 
@@ -59,7 +60,6 @@ public class LongestSubsequence {
             arrayList.add(arr[i]);
         }
         int minStep = 0;
-        int number = 0;
         for (int i = 0; i < arrayList.size(); i++) {
             Integer num = arrayList.get(i);
             Integer numberTake = num;
@@ -67,16 +67,17 @@ public class LongestSubsequence {
             int tem = num;
             Set indexs=new HashSet();
             int index=i;
-            while (set.contains(num) && set.contains(tem) && index <= arrayList.lastIndexOf(tem) && !indexs.contains(index) && index>=i ) {
-                num = tem;
+            int lastIndex=0;
+            while (set.contains(numberTake) && set.contains(tem) && lastIndex <= index && !indexs.contains(index) && index>=i ) {
+                numberTake = tem;
                 tem = tem + difference;
                 realStep++;
                 indexs.add(index);
+                lastIndex=index;
                 index = arrayList.lastIndexOf(tem);
             }
             if (realStep > minStep) {
                 minStep = realStep;
-                number = numberTake;
             }
         }
         return minStep;
